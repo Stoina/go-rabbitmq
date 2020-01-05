@@ -2,6 +2,7 @@ package rabbitmq
 
 import (
 	"errors"
+	"log"
 
 	"github.com/streadway/amqp"
 )
@@ -31,6 +32,8 @@ func (sc *SenderClient) SendTxtMessage(exchange string, mandatory bool, immediat
 }
 
 func sendMessage(sc *SenderClient, exchange string, routingKey string, mandatory bool, immediate bool, contentType string, body string) error {
+
+	log.Println("Send Message: " + body)
 
 	if sc.Client.Channel != nil {
 		return sc.Client.Channel.Publish(exchange, routingKey, mandatory, immediate, amqp.Publishing{
