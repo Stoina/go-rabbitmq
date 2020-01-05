@@ -19,16 +19,6 @@ func NewConsumerClient(host string, port int, username string, password string) 
 
 // ConsumeMessages exported
 // ConsumeMessages ...
-func (cc *ConsumerClient) ConsumeMessages(consumer string, autoAck bool, exclusive bool, noLocal bool, noWait bool, args map[string]interface{}) {
-	msgs, err := cc.Client.Channel.Consume(cc.Client.Queue.Name, consumer, autoAck, exclusive, noLocal, noWait, args)
-
-	if err != nil {
-
-	}
-
-	go func() {
-		for d := range msgs {
-			cc.ReceivedMessages <- d
-		}
-	}()
+func (cc *ConsumerClient) ConsumeMessages(consumer string, autoAck bool, exclusive bool, noLocal bool, noWait bool, args map[string]interface{}) (<-chan amqp.Delivery, error) {
+	return cc.Client.Channel.Consume(cc.Client.Queue.Name, consumer, autoAck, exclusive, noLocal, noWait, args)
 }
